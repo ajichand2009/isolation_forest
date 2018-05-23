@@ -49,6 +49,41 @@ class Node:
 		node,parent = self.lookup(data)
 		if node is not None:
 			children_count = node.children_count()
+		if children_count == 0:
+			if parent:
+				if parent.left is node:
+					parent.left = None
+				else:
+					parent.right = None
+				del node
+			else:
+				self.data = None
+		elif children_count == 1:
+			if node.left:
+				n = node.left
+			else:
+				n = node.right
+			if parent:
+				if parent.left is node:
+					parent.left = n
+				else:
+					parent.right = n
+				del node
+			else:
+				self.left = n.left
+				self.right = n.right
+				self.data = n.data
+		else:
+			parent = node
+			successor = node.right
+			while successor.left:
+				parent = successor
+				successor = successor.left
+			node.data = successor.data
+			if parent.left == successor:
+				parent.left = successor.right
+			else:
+				parent.right = successor.right
 
 ########################################################################
 # FUNCTIONS
