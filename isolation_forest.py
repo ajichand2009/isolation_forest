@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import numpy as np
 
@@ -12,18 +12,19 @@ class Node:
 		self.data = data
 	
 	def insert(self,data):
-		if data < self.data:
-			if self.left is None:
-				self.left = Node(data)
+		if depth <= max_depth:
+			if data < self.data:
+				if self.left is None:
+					self.left = Node(data)
+				else:
+					self.left.insert(data)
+			elif data > self.data:
+				if self.right is None:
+					self.right = Node(data)
+				else:
+					self.right.insert(data)
 			else:
-				self.left.insert(data)
-		elif data > self.data:
-			if self.right is None:
-				self.right = Node(data)
-			else:
-				self.right.insert(data)
-		else:
-			self.data = data
+				self.data = data
 
 	def lookup(self,data,parent=None):
 		if data < self.data:
@@ -100,7 +101,7 @@ class Node:
 	def print_tree(self):
 		if self.left:
 			self.left.print_tree()
-		print self.data
+		print(self.data)
 		if self.right:
 			self.right.print_tree()
 
@@ -160,6 +161,21 @@ def anomaly_score(x,tree,n):
 	s = 2**(-tree.path_length(x)/average_path_length(n))
 	return s
 
+# Function to partition a matrix 'X' based on a pivot attribute
+# (row index of the matrix) and a pivot value
+def partition(X,pivot_attr,pivot_val):
+	a = X[pivot_attr,:]
+	b = np.where(a<pivot_val)
+	c = np.where(a>pivot_val)
+	Y = X[:,b[0]]
+	Z = X[:,c[0]]
+	return Y,Z
+	
 ########################################################################
 # MAIN
 ########################################################################
+X = np.random.randint(10,size=(3,10))+1
+Y,Z = partition(X,2,5)
+print(X)
+print(Y)
+print(Z)
