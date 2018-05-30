@@ -16,7 +16,12 @@ class Node:
 		self.depth = depth
 
 	def build_tree(self,height_limit=8):
-		while self.data.shape[1] > 1 or self.depth < height_limit:
+		a = self.data[self.pivot_attr,:]
+		a_min = np.min(a)
+		a_max = np.max(a)
+		#while self.data.shape[1] > 1 or self.depth < height_limit:
+		if self.data.shape[1] > 1 and self.depth < height_limit and a_min < a_max:
+			self.pivot_val = np.random.randint(a_min,a_max)
 			left,right = partition(self.data,self.pivot_attr,self.pivot_val)
 			self.left = Node(left,self.pivot_attr,self.pivot_val,self.depth+1)
 			self.right = Node(right,self.pivot_attr,self.pivot_val,self.depth+1)
@@ -58,6 +63,7 @@ def partition(X,pivot_attr,pivot_val=None):
 #	d = np.where(a==pivot_val)
 	Y = X[:,b[0]]
 	Z = X[:,c[0]]
+	print(pivot_val)
 #	W = X[:,d[0]]
 	return Y,Z
 
@@ -65,11 +71,11 @@ def partition(X,pivot_attr,pivot_val=None):
 # MAIN
 ########################################################################
 np.random.seed(1)
-X = np.random.randint(100,size=(2,10))+1
+X = np.random.randint(100,size=(2,4))+1
 
 X_train = X[:,0:7]
 X_test = X[:,7:10]
 
-t = Node(X_train,0)
+t = Node(X,0)
 t.build_tree()
 t.print_tree()
