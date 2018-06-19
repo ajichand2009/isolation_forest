@@ -40,11 +40,13 @@ example_indices = np.argsort(-anomaly_score)
 
 #write_data = np.c_[X_all,anomaly_score.reshape(-1,1)]
 
-#np.savetxt('data.txt',write_data,fmt='%f',delimiter=' ',newline='\n')
+write_data = np.c_[X_all[example_indices[:10]],anomaly_score[example_indices[:10]]]
 
-#print(np.c_[X_all[example_indices[:10]],anomaly_score[example_indices[:10]]])
+np.savetxt('data.txt',write_data,fmt='%f',delimiter=' ',newline='\n')
 
-#print("MAX SCORE : %f" %np.max(anomaly_score))
+print(write_data)
+
+print("MAX SCORE : %f" %np.max(anomaly_score))
 
 #========================================================================
 # DIMENSIONALITY REDUCTION
