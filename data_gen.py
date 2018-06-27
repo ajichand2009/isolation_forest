@@ -5,11 +5,9 @@
 import numpy as np
 
 
+np.random.seed(1)
 
-# TODO: Create hashmap of attributes to indices. This will help in conversion of
-#       objects to Numpy arrays for further processing.
-
-# TODO: Generate random connections with random packets.
+#========================================================================
 
 class Packet:
 	def __init__(self,
@@ -29,6 +27,7 @@ class Packet:
 		self.header_bytes = header_bytes
 		self.payload_bytes = payload_bytes
 		self.application_protocol = application_protocol
+		#self.numpy_array = np.asarray([src_ip_addr,dst_ip_addr,src_port,dst_port,packet_type,header_bytes,payload_bytes,application_protocol])
 	
 	def print_attributes(self):
 		print("Source IP Address : ",self.src_ip_addr)
@@ -39,6 +38,7 @@ class Packet:
 		print("Total number of Header bytes :",self.header_bytes)
 		print("Total number of Payload bytes :",self.payload_bytes)
 		print("Application Protocol :",self.application_protocol)
+		#print("Numpy array :",self.numpy_array)
 
 class Connection:
 	def __init__(self,
@@ -59,6 +59,7 @@ class Connection:
 		self.num_packets = num_packets
 		self.total_header_bytes = total_header_bytes
 		self.total_payload_bytes = total_payload_bytes
+		#self.numpy_array = np.array([start_time,end_time,device,port,server,num_packets,total_header_bytes,total_payload_bytes])
 
 	def print_attributes(self):
 		print("Start Time :",self.start_time)
@@ -69,4 +70,52 @@ class Connection:
 		print("Number of Packets :",self.num_packets)
 		print("Total number of bytes of Header :",self.total_header_bytes)
 		print("Total number of bytes of Payload:",self.total_payload_bytes)
+		#print("Numpy Array:",self.numpy_array)
 
+#========================================================================
+
+packet_type_array = ["start","stop","body","ack"]
+application_protocol_array = ["ftp","http","https"]
+ip_addr_array = []
+
+ip_addr_prefix = "192.168.1."
+
+for i in range(100):
+	x = ip_addr_prefix+str(i)
+	ip_addr_array.append(x)
+
+def gen_random_packet():
+	packet_type = np.random.choice(packet_type_array)
+	application_protocol = np.random.choice(application_protocol_array)
+	src_ip_addr = np.random.choice(ip_addr_array)
+	dst_ip_addr = np.random.choice(ip_addr_array)
+	src_port = np.random.randint(1,10)
+	dst_port = np.random.randint(1,10)
+	header_bytes = np.random.randint(1,5)
+	payload_bytes = np.random.randint(1,10)
+	if src_ip_addr != dst_ip_addr and src_port != dst_port:
+		print("Creating packet...")
+		p = Packet(src_ip_addr,dst_ip_addr,src_port,dst_port,packet_type,header_bytes,payload_bytes,application_protocol)
+		return p
+
+def gen_random_connection():
+	start_time = np.random.randint(1,100)
+	end_time = start_time + np.random.randint(1,5)
+	device = np.random.randint(1,10)
+	port = np.random.randint(1,10)
+	server = np.random.randint(1,10)
+	num_packets = np.random.randint(1,10)
+	header_bytes = np.random.randint(1,5)
+	payload_bytes = np.random.randint(1,10)
+	c = Connection(start_time,end_time,device,port,server,num_packets,header_bytes,payload_bytes)
+	return c
+
+for i in range(10):
+	p = gen_random_packet()
+	p.print_attributes()
+	print("\nEND OF PACKET\n")
+
+for i in range(10):
+	c = gen_random_connection()
+	c.print_attributes()
+	print("\nEND OF CONNECTION\n")
